@@ -1,15 +1,33 @@
 import numpy as np
 import hexpod
-
+import forward_kinematics
 
 
 
 #Hexpod defintion for forward kinematics solving
 hexpod = hexpod.Hexpod(0.4, 0.2, 0.3, 1, 2)
-print("Base leg connections: ", hexpod.base_leg_connections)
-print("Pad leg connections: ", hexpod.pad_leg_connections)
-print("Leg length: ", hexpod.leg_length)
-print("Pad translation: ", hexpod.pad_translation)
-print("Pad rotation: ", hexpod.pad_rotation)
-print("Base translation: ", hexpod.base_translation)
-print("Base rotation: ", hexpod.base_rotation)
+hexpod.pad_rotation = np.array([0,0,np.deg2rad(30)])  
+hexpod.pad_translation = np.array([0,0,1])
+
+# hexpod.PrintStatus()
+# hexpod.VisualizeHexagon(hexpod.base_leg_connections)
+# hexpod.VisualizeHexagon(hexpod.pad_leg_connections)
+# hexpod.VisualizeAllLegConnectionPositions()
+
+#Forward kinematics solver
+fk = forward_kinematics.ForwardKinematics()
+
+#Solve for pad position and rotation
+
+fk.PadPosRotSolver(hexpod, 0.01)
+hexpod.VisualizeAllLegConnectionPositions()
+hexpod.SetLegLengthFromRatio([0.3,0.3,0.5,0.5,0.6,0.6])
+fk.PadPosRotSolver(hexpod, 0.01)
+hexpod.VisualizeAllLegConnectionPositions()
+hexpod.SetLegLengthFromRatio([1,1,1,1,1,1])
+
+
+#TODO
+# add force solver
+# add inverse kinematics solver
+# add gui for setting leg lengths or roations
