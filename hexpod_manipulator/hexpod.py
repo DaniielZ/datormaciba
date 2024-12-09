@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial.transform import Rotation as R
 
 #3d class for a hex pod 
@@ -57,6 +58,7 @@ class Hexpod:
   
   
   # input is trannslation and rotation of the pad rad ians
+  @staticmethod
   def PlatformLegConnectionPos3D(leg_connections_2d, translation, rotation):
     # Apply rotations
     rotation_matrix = R.from_euler('xyz', rotation).as_matrix()
@@ -67,6 +69,7 @@ class Hexpod:
     for i in range(6):
       leg_connections_3d[i] = (leg_connections_3d[i] @ rotation_matrix.T) + translation
     return leg_connections_3d
+    
     
   def VisualizeAllLegConnectionPositions(self):
     # Apply rotations
@@ -86,9 +89,17 @@ class Hexpod:
         ax.plot([pad_leg_pos[i, 0], base_leg_pos[i, 0]], 
                 [pad_leg_pos[i, 1], base_leg_pos[i, 1]], 
                 [pad_leg_pos[i, 2], base_leg_pos[i, 2]], c='k')
-    
+    # hard to eunderstand the 3d plot without this
+    # Set the aspect ratio
+    ax.set_aspect('auto')
+    limit = np.max(np.abs(np.concatenate((pad_leg_pos, base_leg_pos)))) + 0.1
+    ax.set_xlim([-limit, limit])
+    ax.set_ylim([-limit, limit])
+    ax.set_zlim([-limit, limit])
+    fig.set_size_inches(10, 10)
     plt.show()
     return
+  
   def VisualizeHexagon(self, hexagon):
     fig, ax = plt.subplots()
     ax.scatter(hexagon[:,0], hexagon[:,1])
@@ -97,6 +108,7 @@ class Hexpod:
         ax.annotate(str(i), (hexagon[i,0], hexagon[i,1]))
     plt.show()
     return
+  
 # 1 is max, 0 is min
   def SetLegLengthFromRatio(self, ratio_array):
     ratio_array = np.array(ratio_array)  # Convert to NumPy array

@@ -1,33 +1,52 @@
 import numpy as np
-import hexpod
-import forward_kinematics
-
+from hexpod import Hexpod
+from forward_kinematics import ForwardKinematics
+from force_solver import ForceSolver
+from inverse_kinematics import InverseKinematics
+#https://loguru.readthedocs.io/en/stable/overview.html
 
 
 #Hexpod defintion for forward kinematics solving
-hexpod = hexpod.Hexpod(0.4, 0.2, 0.3, 1, 2)
+hexpod = Hexpod(0.4, 0.2, 0.3, 0.5, 2)
+
 hexpod.pad_rotation = np.array([0,0,np.deg2rad(30)])  
 hexpod.pad_translation = np.array([0,0,1])
+applied_force = np.array([0, 0, -9.81 * 0.5])
+applied_force_pos_relative_to_pad = np.array([0, 1, 0])
 
-# hexpod.PrintStatus()
-# hexpod.VisualizeHexagon(hexpod.base_leg_connections)
-# hexpod.VisualizeHexagon(hexpod.pad_leg_connections)
-# hexpod.VisualizeAllLegConnectionPositions()
-
-#Forward kinematics solver
-fk = forward_kinematics.ForwardKinematics()
+fk = ForwardKinematics()
+fs = ForceSolver() 
+ik = InverseKinematics()
 
 #Solve for pad position and rotation
 
-fk.PadPosRotSolver(hexpod, 0.01)
-hexpod.VisualizeAllLegConnectionPositions()
-hexpod.SetLegLengthFromRatio([0.3,0.3,0.5,0.5,0.6,0.6])
-fk.PadPosRotSolver(hexpod, 0.01)
-hexpod.VisualizeAllLegConnectionPositions()
-hexpod.SetLegLengthFromRatio([1,1,1,1,1,1])
+# Test case 1
+hexpod.SetLegLengthFromRatio([0.3,0.3,0.3,0.3,0.3,0.3])
+fk.PadPosRotSolver(hexpod, 0.01) 
+hexpod.VisualizeAllLegConnectionPositions() #
 
+# Test case 2
+# hexpod.SetLegLengthFromRatio([0.9,0.9,1,1,1,1])
+# fk.PadPosRotSolver(hexpod, 0.01) 
+# hexpod.VisualizeAllLegConnectionPositions() 
+
+# Test case 3
+# hexpod.SetLegLengthFromRatio([0.9,0.9,1,1,0.8,0.8])
+# fk.PadPosRotSolver(hexpod, 0.01) 
+# hexpod.VisualizeAllLegConnectionPositions() 
+
+fs.SolveForces(hexpod, applied_force_pos_relative_to_pad, applied_force, max_error = 0.01)
+# print(fs.forces)
+
+
+fs.VisualizeForces(hexpod, true_scale=False, max_force_size=0.5, applied_force=applied_force,applied_force_pos_relative_to_pad=applied_force_pos_relative_to_pad)
+
+
+# IK Test case 1
+hexpod.pad_translation = np.array([0,0,1])
+hexpod.pad_rotation = np.array([np.deg2rad(30),np.deg2rad(30),np.deg2rad(30)])
+ik.LegLeangthSolver(hexpod, 0.01)
+hexpod.VisualizeAllLegConnectionPositions()
 
 #TODO
-# add force solver
-# add inverse kinematics solver
-# add gui for setting leg lengths or roations
+# PDFinņš Dairim
