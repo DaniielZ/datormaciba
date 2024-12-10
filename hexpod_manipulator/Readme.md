@@ -1,5 +1,6 @@
 # Hexpod manipulator solver
-This is an program that can be used for solving exercises regarding parallel manipulators (specifically hexpod manipulator with 6 legs)! The code quality isn't the best and would only be recommended to be used as a source not as a library if any adaptations need to be made[alt text](figures/image.png)
+This is an program that can be used for solving exercises regarding parallel manipulators (specifically hexpod manipulator with 6 legs)! The code quality isn't the best and would only be recommended to be used as a source not as a library if any adaptations need to be made
+![alt text](figures/image.png)
 ## Functionality
 - Create a hexpod manipulator:
   - short/long edge ratio, radius for leg connection points
