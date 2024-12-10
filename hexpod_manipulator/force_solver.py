@@ -1,3 +1,4 @@
+from tkinter import font
 from unittest import result
 
 from attr import s
@@ -88,13 +89,13 @@ class ForceSolver:
     ax.quiver(applied_force_pos_relative_to_abs[0], applied_force_pos_relative_to_abs[1], applied_force_pos_relative_to_abs[2], 
               applied_force[0], applied_force[1], applied_force[2], color='r')
     ax.text(applied_force_pos_relative_to_abs[0], applied_force_pos_relative_to_abs[1], applied_force_pos_relative_to_abs[2], 
-          'Applied Force - ' + str(np.round(applied_force,1)), color='black')
+          'Applied Force-' + str(np.round(applied_force,1)), color='black', fontsize=8)
     
     for i in range(6):
         ax.quiver(pad_leg_pos[i, 0], pad_leg_pos[i, 1], pad_leg_pos[i, 2], 
                   forces_3d[i, 0], forces_3d[i, 1], forces_3d[i, 2], color='g')
         ax.text(pad_leg_pos[i, 0], pad_leg_pos[i, 1], pad_leg_pos[i, 2], 
-          'Force on leg ' + str(i) + ' - ' + str(np.round(self.forces[i],1)), color='black')
+          str(i) + '-' + str(np.round(self.forces[i],1))+ "N", color='black', fontsize=8)
     
     # hard to eunderstand the 3d plot without this
     # Set the aspect ratio
