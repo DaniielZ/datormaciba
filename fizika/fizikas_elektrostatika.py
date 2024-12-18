@@ -5,6 +5,7 @@ import os
 
 
 
+
 # Define the simulation grid and parameters
 grid_size = 200  # Size of the grid
 plate_voltage = 220  # Voltage on the plates
@@ -89,14 +90,19 @@ potential_grid, set_potentials = add_conductor_ring(potential_grid, set_potentia
 
 
 # Check if the potential data file exists
-if os.path.exists('potential(1).npy'):
+if os.path.exists('potential(2).npy'):
   # Load the field data
-  final_potential = np.load('potential(1).npy')
+  final_potential = np.load('potential(2).npy')
+  
+  if input('Do you want to perform relaxation? (y/n)') == 'y':
+    final_potential = relax_potential(final_potential, set_potentials, permittivity_grid, int(input('Enter the number of iterations: ')))
+    # Save the field data
+    np.save('potential(2).npy', final_potential)
 else:
   # Perform relaxation
   final_potential = relax_potential(potential_grid, set_potentials, permittivity_grid, iterations)
   # Save the field data
-  np.save('potential(1).npy', final_potential)
+  np.save('potential(2).npy', final_potential)
 
 
 
